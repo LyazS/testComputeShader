@@ -1,0 +1,28 @@
+﻿#pragma kernel CSMain
+// Each #kernel tells which function to compile; you can have many kernels
+//CSMain只是一个名字，可以更改的
+
+//有空看看UnityCG.cginc，里边实现了一些基础运算，就不用重复造轮子了
+// #include "UnityCG.cginc"
+//此处结构体的内存结构应与C#脚本定义的内存结构一致
+struct Particle
+{
+    float2 position;
+    float2 velocity;
+};
+// RWStructuredBuffer<Particle> particles;
+RWStructuredBuffer<Particle> particles;
+float2 mousePosition;
+float dt;
+
+//numthreads是调用一次的批处理大小
+//括号里的id用id.x,id.y,id.z来访问
+[numthreads(1024,1,1)]
+void CSMain (uint3 id : SV_DispatchThreadID)
+{
+    // TODO: insert actual code here!
+    float2 v=float2(mousePosition.x-particles[id.x].position.x,mousePosition.y-particles[id.x].position.y);
+    float d2=v.x*v.x+v.y*v.y;
+    particles[id.x].velocity=particles[id.x].velocity+200*(v/d2)*dt;
+    particles[id.x].position=particles[id.x].position+particles[id.x].velocity*dt;
+}
