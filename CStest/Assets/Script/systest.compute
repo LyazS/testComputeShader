@@ -1,0 +1,17 @@
+﻿#pragma kernel Eular2QRotate
+
+RWStructuredBuffer<float4> Quant;
+RWStructuredBuffer<float3> Eular;
+
+[numthreads(8,1,1)]
+void Eular2QRotate (uint3 id : SV_DispatchThreadID)
+{
+    // TODO: insert actual code here!
+    Quant[id.x]= float4(
+        cos(Eular[id.x].x/2)*sin(Eular[id.x].y/2)*cos(Eular[id.x].z/2)+sin(Eular[id.x].x/2)*cos(Eular[id.x].y/2)*sin(Eular[id.x].z/2),
+        sin(Eular[id.x].x/2)*cos(Eular[id.x].y/2)*cos(Eular[id.x].z/2)-cos(Eular[id.x].x/2)*sin(Eular[id.x].y/2)*sin(Eular[id.x].z/2),
+        -sin(Eular[id.x].x/2)*sin(Eular[id.x].y/2)*cos(Eular[id.x].z/2)+cos(Eular[id.x].x/2)*cos(Eular[id.x].y/2)*sin(Eular[id.x].z/2),
+        cos(Eular[id.x].x/2)*cos(Eular[id.x].y/2)*cos(Eular[id.x].z/2)+sin(Eular[id.x].x/2)*sin(Eular[id.x].y/2)*sin(Eular[id.x].z/2)
+    );
+    
+}
